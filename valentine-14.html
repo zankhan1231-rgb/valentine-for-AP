@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Will you be my Valentine, PB?</title>
+
+  <!-- Confetti library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --pink: #ffc0e0;
+      --pink-light: #ffe5f3;
+      --pink-dark: #ff85c1;
+      --blue: #c2e0ff;
+      --blue-light: #e8f4ff;
+      --blue-dark: #7dc4ff;
+      --purple: #e5d4ff;
+      --gradient-romantic: linear-gradient(135deg, #ffe5f3 0%, #ffc0e0 25%, #e5d4ff 50%, #c2e0ff 75%, #e8f4ff 100%);
+    }
+
+    * { 
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--gradient-romantic);
+      font-family: 'Poppins', sans-serif;
+      overflow-x: hidden;
+      position: relative;
+      padding: 20px;
+    }
+
+    /* Animated background with floating hearts */
+    body::before {
+      content: '💕 💝 💖 ✨ 💗 🌸 💕 💝 💖 ✨ 💗 🌸 💕 💝 💖 ✨ 💗 🌸';
+      position: fixed;
+      inset: 0;
+      font-size: 30px;
+      line-height: 100px;
+      opacity: 0.15;
+      pointer-events: none;
+      animation: float-hearts 40s linear infinite;
+      white-space: pre-wrap;
+      word-spacing: 50px;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: 
+        radial-gradient(circle at 15% 25%, rgba(255, 192, 224, 0.4) 0%, transparent 40%),
+        radial-gradient(circle at 85% 75%, rgba(194, 224, 255, 0.4) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(229, 212, 255, 0.3) 0%, transparent 50%);
+      pointer-events: none;
+      animation: float 25s ease-in-out infinite;
+    }
+
+    @keyframes float-hearts {
+      0% { transform: translateY(100vh); }
+      100% { transform: translateY(-100vh); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) scale(1); opacity: 0.6; }
+      50% { transform: translateY(-30px) scale(1.1); opacity: 0.8; }
+    }
+
+    /* Confetti Canvas */
+    #confettiCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* Main Container */
+    .container {
+      width: 100%;
+      max-width: 900px;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Main Card - Transparent, no white frame */
+    .card {
+      background: transparent;
+      backdrop-filter: none;
+      border-radius: 0;
+      padding: 50px 40px;
+      text-align: center;
+      box-shadow: none;
+      border: none;
+      position: relative;
+    }
+
+    /* Romantic Animal SVG */
+    .art {
+      width: 280px;
+      margin: 0 auto 20px;
+      display: block;
+      filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
+      animation: gentle-bounce 3s ease-in-out infinite;
+    }
+
+    @keyframes gentle-bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* Typography - Bright pink with white glow for visibility */
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 700;
+      color: #ff1f68;
+      margin: 20px 0;
+      line-height: 1.2;
+      text-shadow: 0 2px 8px rgba(255, 255, 255, 0.8), 0 4px 16px rgba(255, 31, 104, 0.3);
+    }
+
+    /* Button Zone */
+    .button-zone {
+      position: relative;
+      width: 100%;
+      height: 200px;
+      margin: 40px auto 20px;
+      touch-action: none;
+    }
+
+    button {
+      position: absolute;
+      padding: 18px 40px;
+      font-size: 20px;
+      font-weight: 600;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      transition: all 0.2s ease;
+      font-family: 'Poppins', sans-serif;
+      z-index: 1000;
+    }
+
+    #yesBtn {
+      left: 20%;
+      top: 50%;
+      transform: translateY(-50%);
+      background: linear-gradient(135deg, var(--pink-dark), var(--pink), var(--pink-light));
+      color: white;
+      border: 3px solid rgba(255, 255, 255, 0.9);
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+
+    #yesBtn::before {
+      content: '✨';
+      position: absolute;
+      left: 10px;
+      animation: sparkle 1.5s ease-in-out infinite;
+    }
+
+    #yesBtn::after {
+      content: '✨';
+      position: absolute;
+      right: 10px;
+      animation: sparkle 1.5s ease-in-out infinite 0.75s;
+    }
+
+    @keyframes sparkle {
+      0%, 100% { opacity: 0.3; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+
+    #yesBtn:hover {
+      box-shadow: 0 20px 50px rgba(255, 133, 193, 0.5);
+      background: linear-gradient(135deg, #ff70b0, var(--pink-dark), var(--pink));
+    }
+
+    #noBtn {
+      left: 72%;
+      top: 75%;
+      transform: translate(-50%, -50%);
+      background: linear-gradient(135deg, #ffffff, #f8f8f8);
+      color: #999;
+      border: 3px solid #ffe5f3;
+      font-style: italic;
+    }
+
+    /* Success Screen */
+    .result {
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .result h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 4.5vw, 48px);
+      color: #ff1f68;
+      margin: 20px 0;
+      text-shadow: 0 2px 8px rgba(255, 255, 255, 0.9), 0 4px 16px rgba(255, 31, 104, 0.4);
+      font-weight: 700;
+    }
+
+    .celebration-gif {
+      width: min(350px, 90vw);
+      margin: 20px auto;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Activities Section */
+    .activities-section {
+      display: none;
+      margin-top: 40px;
+      animation: slideUp 0.6s ease;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .activities-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 4vw, 40px);
+      color: #ff1f68;
+      text-shadow: 0 2px 8px rgba(255, 255, 255, 0.9), 0 4px 16px rgba(255, 31, 104, 0.4);
+      margin: 30px 0 20px;
+      font-weight: 700;
+    }
+
+    .activity-card {
+      background: transparent;
+      border-radius: 25px;
+      padding: 35px;
+      margin: 25px 0;
+      box-shadow: none;
+      transition: all 0.3s ease;
+      border: none;
+    }
+
+    .activity-card.unlocked {
+      background: transparent;
+      box-shadow: none;
+      border: none;
+    }
+
+    .lock-icon {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 15px;
+      color: var(--pink-dark);
+      background: linear-gradient(135deg, rgba(255, 192, 224, 0.3), rgba(194, 224, 255, 0.3));
+      padding: 10px 20px;
+      border-radius: 20px;
+      display: inline-block;
+    }
+
+    .activity-question {
+      font-size: 18px;
+      font-weight: 500;
+      color: #333;
+      margin: 15px 0;
+      text-shadow: 0 2px 4px rgba(255, 255, 255, 0.8);
+    }
+
+    .activity-input {
+      width: 100%;
+      max-width: 320px;
+      padding: 14px 24px;
+      font-size: 16px;
+      border: 3px solid var(--pink-light);
+      border-radius: 30px;
+      margin: 15px auto 10px;
+      font-family: 'Poppins', sans-serif;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.95);
+      display: block;
+    }
+
+    .activity-input:focus {
+      outline: none;
+      border-color: var(--pink);
+      box-shadow: 0 0 20px rgba(255, 192, 224, 0.4);
+    }
+
+    .unlock-btn {
+      background: linear-gradient(135deg, var(--blue-dark), var(--blue), var(--blue-light));
+      color: white;
+      border: 3px solid rgba(255, 255, 255, 0.9);
+      padding: 14px 35px;
+      border-radius: 30px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      display: block;
+      margin: 15px auto 15px auto;
+      transition: all 0.3s ease;
+      max-width: 200px;
+    }
+
+    .unlock-btn::before {
+      content: '🔓 ';
+    }
+
+    .unlock-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 30px rgba(125, 196, 255, 0.5);
+    }
+
+    .activity-content {
+      display: none;
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--pink-dark);
+      text-shadow: 0 2px 6px rgba(255, 255, 255, 0.9);
+    }
+
+    .activity-content strong {
+      text-shadow: 0 2px 6px rgba(255, 255, 255, 0.9);
+    }
+
+    .error-msg {
+      color: #ff4444;
+      font-size: 14px;
+      margin-top: 10px;
+      display: none;
+    }
+
+    /* Final Reveal */
+    .final-reveal {
+      display: none;
+      margin-top: 40px;
+      padding: 50px;
+      background: transparent;
+      border-radius: 35px;
+      border: none;
+      box-shadow: none;
+    }
+
+    .final-reveal h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(30px, 4vw, 44px);
+      color: var(--pink-dark);
+      margin-bottom: 25px;
+      font-weight: 700;
+      text-shadow: 0 2px 8px rgba(255, 255, 255, 0.9);
+    }
+
+    .final-reveal p {
+      text-shadow: 0 2px 6px rgba(255, 255, 255, 0.8);
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .card {
+        padding: 30px 20px;
+      }
+
+      button {
+        padding: 14px 28px;
+        font-size: 16px;
+      }
+
+      .button-zone {
+        height: 180px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="confettiCanvas"></canvas>
+
+  <!-- Background Music Player -->
+  <audio id="bgMusic" loop>
+    <source src="Love Story (Fast Piano Ver.).mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Music Control Button -->
+  <button id="musicToggle" style="position: fixed; bottom: 20px; right: 20px; z-index: 10000; width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, var(--pink-dark), var(--pink)); border: 3px solid white; cursor: pointer; box-shadow: 0 8px 20px rgba(255, 133, 193, 0.4); display: flex; align-items: center; justify-content: center; font-size: 24px; transition: all 0.3s ease;">
+    🔊
+  </button>
+
+  <div class="container">
+    <main class="card" id="mainCard">
+      <!-- Romantic Animal with Heart -->
+      <svg class="art" viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="fur" x1="0" x2="1">
+            <stop offset="0" stop-color="#ffb6d9"/>
+            <stop offset="1" stop-color="#ff6bb5"/>
+          </linearGradient>
+          <linearGradient id="heart" x1="0" x2="1">
+            <stop offset="0" stop-color="#ff6bb5"/>
+            <stop offset="1" stop-color="#ff4d7d"/>
+          </linearGradient>
+        </defs>
+
+        <path d="M250 50 C250 33 270 25 282 38
+                 C294 25 314 33 314 50
+                 C314 78 282 92 282 106
+                 C282 92 250 78 250 50Z"
+              fill="url(#heart)">
+          <animateTransform
+            attributeName="transform"
+            type="scale"
+            values="1;1.1;1"
+            dur="1.5s"
+            repeatCount="indefinite"
+            additive="sum"/>
+        </path>
+
+        <path d="M90 120 C90 70 140 40 190 60
+                 C240 40 290 70 290 120
+                 C290 180 240 210 190 210
+                 C140 210 90 180 90 120Z"
+              fill="url(#fur)"/>
+
+        <path d="M110 92 L95 55 L140 78 Z" fill="#ff6bb5"/>
+        <path d="M270 92 L285 55 L240 78 Z" fill="#ff6bb5"/>
+
+        <circle cx="160" cy="130" r="8"/>
+        <circle cx="220" cy="130" r="8"/>
+
+        <path d="M190 144 C186 144 182 148 182 152
+                 C182 160 190 164 190 170
+                 C190 164 198 160 198 152
+                 C198 148 194 144 190 144Z"
+              fill="#ff7aa2"/>
+      </svg>
+
+      <h1>Hey PB, your Pollywag has a question... will you be my Valentine forever? 💕</h1>
+
+      <section class="button-zone" id="zone">
+        <button id="yesBtn">Yes! 💕</button>
+        <button id="noBtn">Maybe not...</button>
+      </section>
+
+      <!-- Success Message -->
+      <section class="result" id="result">
+        <h2>You just made me the happiest! I love you, PB 💕</h2>
+        <img
+          class="celebration-gif"
+          src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif"
+          alt="Celebration"
+        />
+      </section>
+
+      <!-- Activities Section -->
+      <section class="activities-section" id="activitiesSection">
+        <h3 class="activities-title">Our Valentine's Day 2026 💝</h3>
+        <p style="color: #ff6bb5; margin-bottom: 30px; font-weight: 600; font-size: 17px;">
+          Unlock each surprise by answering the questions below! 💕<br>
+          <span style="font-size: 15px; color: #ff85c1; font-style: italic;">
+            (P.S. If you can't unlock any one, that activity gets cancelled 😏✨)
+          </span>
+        </p>
+
+        <!-- Activity 1 -->
+        <div class="activity-card" id="activity1">
+          <div class="lock-icon">🌅 Morning Perks</div>
+          <div class="activity-question">When did we go on our first date?</div>
+          <input type="text" class="activity-input" id="input1" placeholder="DD Month YYYY">
+          <button class="unlock-btn" onclick="unlockActivity(1, '22 june 2024')">Unlock</button>
+          <div class="error-msg" id="error1">Not quite! Try again 💕</div>
+          <div class="activity-content" id="content1">
+            <div style="font-size: 36px; margin-bottom: 15px;">☀️🥞💋</div>
+            <strong>Good morning breakfast in bed with a kiss</strong>
+          </div>
+        </div>
+
+        <!-- Activity 2 -->
+        <div class="activity-card" id="activity2">
+          <div class="lock-icon">☀️ Afternoon Perks</div>
+          <div class="activity-question">Where did our story spark?</div>
+          <input type="text" class="activity-input" id="input2" placeholder="City name">
+          <button class="unlock-btn" onclick="unlockActivity(2, 'goa')">Unlock</button>
+          <div class="error-msg" id="error2">Not quite! Try again 💕</div>
+          <div class="activity-content" id="content2">
+            <div style="font-size: 36px; margin-bottom: 15px;">🛍️💕</div>
+            <strong>Shopping spree together</strong>
+          </div>
+        </div>
+
+        <!-- Activity 3 -->
+        <div class="activity-card" id="activity3">
+          <div class="lock-icon">🌆 Evening Perks</div>
+          <div class="activity-question">What's your favorite thing to do with me?</div>
+          <input type="text" class="activity-input" id="input3" placeholder="Your answer">
+          <button class="unlock-btn" onclick="unlockActivity(3, 'cuddle')">Unlock</button>
+          <div class="error-msg" id="error3">Not quite! Try again 💕</div>
+          <div class="activity-content" id="content3">
+            <div style="font-size: 36px; margin-bottom: 15px;">🍽️🌹</div>
+            <strong>Romantic dinner date</strong>
+          </div>
+        </div>
+
+        <!-- Activity 4 -->
+        <div class="activity-card" id="activity4">
+          <div class="lock-icon">🌙 Night Perks</div>
+          <div class="activity-question">When did u first say "I love you"?</div>
+          <input type="text" class="activity-input" id="input4" placeholder="DD Month YYYY">
+          <button class="unlock-btn" onclick="unlockActivity(4, '1 dec 2024')">Unlock</button>
+          <div class="error-msg" id="error4">Not quite! Try again 💕</div>
+          <div class="activity-content" id="content4">
+            <div style="font-size: 36px; margin-bottom: 15px;">🎬🍿</div>
+            <strong>Wuthering Heights movie together</strong>
+          </div>
+        </div>
+
+        <!-- Final Reveal -->
+        <div class="final-reveal" id="finalReveal">
+          <h3>🎉 All surprises unlocked! 🎉</h3>
+          <p style="font-size: 20px; color: #666;">Get ready for the best Valentine's Day ever! 💕✨</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const zone = document.getElementById("zone");
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const result = document.getElementById("result");
+    const activitiesSection = document.getElementById("activitiesSection");
+    const finalReveal = document.getElementById("finalReveal");
+    const bgMusic = document.getElementById("bgMusic");
+    const musicToggle = document.getElementById("musicToggle");
+
+    let unlockedCount = 0;
+    let isMusicPlaying = false;
+
+    /* ---------- MUSIC CONTROL ---------- */
+    // Try to autoplay when page loads
+    window.addEventListener('load', () => {
+      bgMusic.volume = 0.3; // Set volume to 30%
+      bgMusic.play().then(() => {
+        isMusicPlaying = true;
+        musicToggle.textContent = "🔊";
+      }).catch(() => {
+        // Autoplay blocked, user needs to interact first
+        isMusicPlaying = false;
+        musicToggle.textContent = "🔇";
+      });
+    });
+
+    // Toggle music on/off
+    musicToggle.addEventListener('click', () => {
+      if (isMusicPlaying) {
+        bgMusic.pause();
+        musicToggle.textContent = "🔇";
+        isMusicPlaying = false;
+      } else {
+        bgMusic.play();
+        musicToggle.textContent = "🔊";
+        isMusicPlaying = true;
+      }
+    });
+
+    // Ensure music plays when user clicks Yes (in case autoplay was blocked)
+    function startMusicIfNeeded() {
+      if (!isMusicPlaying) {
+        bgMusic.play().then(() => {
+          isMusicPlaying = true;
+          musicToggle.textContent = "🔊";
+        }).catch(() => {});
+      }
+    }
+
+    /* ---------- CONFETTI ---------- */
+    const confettiCanvas = document.getElementById("confettiCanvas");
+
+    function resizeConfettiCanvas() {
+      const dpr = Math.max(1, window.devicePixelRatio || 1);
+      confettiCanvas.width = Math.floor(window.innerWidth * dpr);
+      confettiCanvas.height = Math.floor(window.innerHeight * dpr);
+    }
+
+    resizeConfettiCanvas();
+    window.addEventListener("resize", resizeConfettiCanvas);
+
+    const confettiInstance = confetti.create(confettiCanvas, {
+      resize: false,
+      useWorker: true
+    });
+
+    function fullScreenConfetti() {
+      const end = Date.now() + 2000;
+      (function frame() {
+        confettiInstance({
+          particleCount: 15,
+          spread: 100,
+          startVelocity: 50,
+          origin: { x: Math.random(), y: Math.random() * 0.4 },
+          colors: ['#ffb6d9', '#ff6bb5', '#a8d8ff', '#5eb3ff']
+        });
+        if (Date.now() < end) requestAnimationFrame(frame);
+      })();
+    }
+
+    /* ---------- NO BUTTON JUMPS TO RANDOM POSITIONS ---------- */
+    const noTexts = [
+      "Maybe not...",
+      "No (u crazy)",
+      "No (lost my brains)",
+      "Nope nope nope",
+      "Are u serious? 😅",
+      "Not happening!",
+      "Nice try 😏",
+      "Umm... no?",
+      "Keep dreaming 💭",
+      "Absolutely not!",
+      "Try the other button 👉",
+      "Wrong button babe"
+    ];
+    
+    const noPositions = [
+      { left: '10%', top: '15%' },
+      { left: '50%', top: '8%' },
+      { left: '75%', top: '20%' },
+      { left: '72%', top: '75%' },
+      { left: '45%', top: '85%' },
+      { left: '12%', top: '78%' },
+      { left: '28%', top: '45%' }
+    ];
+    
+    let noTextIndex = 0;
+    let lastMoveTime = 0;
+    let currentPosIndex = 3;
+
+    function moveNo(px, py) {
+      const b = noBtn.getBoundingClientRect();
+      const d = Math.hypot(
+        (b.left + b.width / 2) - px,
+        (b.top + b.height / 2) - py
+      );
+      
+      if (d < 120) {
+        let newPosIndex;
+        do {
+          newPosIndex = Math.floor(Math.random() * noPositions.length);
+        } while (newPosIndex === currentPosIndex);
+        
+        currentPosIndex = newPosIndex;
+        const newPos = noPositions[newPosIndex];
+        
+        noBtn.style.left = newPos.left;
+        noBtn.style.top = newPos.top;
+
+        const now = Date.now();
+        if (now - lastMoveTime > 600) {
+          noTextIndex = (noTextIndex + 1) % noTexts.length;
+          noBtn.textContent = noTexts[noTextIndex];
+          lastMoveTime = now;
+        }
+      }
+    }
+
+    zone.addEventListener("pointermove", e => {
+      const b = noBtn.getBoundingClientRect();
+      const d = Math.hypot(
+        (b.left + b.width / 2) - e.clientX,
+        (b.top + b.height / 2) - e.clientY
+      );
+      if (d < 150) moveNo(e.clientX, e.clientY);
+    });
+
+    noBtn.addEventListener("click", e => e.preventDefault());
+
+    /* ---------- YES CLICK ---------- */
+    yesBtn.addEventListener("click", () => {
+      zone.style.display = "none";
+      result.style.display = "block";
+      resizeConfettiCanvas();
+      fullScreenConfetti();
+      startMusicIfNeeded(); // Start music if not playing
+
+      setTimeout(() => {
+        activitiesSection.style.display = "block";
+        activitiesSection.scrollIntoView({ behavior: 'smooth' });
+      }, 2000);
+    });
+
+    /* ---------- UNLOCK ACTIVITIES ---------- */
+    function unlockActivity(num, correctAnswer) {
+      const input = document.getElementById(`input${num}`);
+      const content = document.getElementById(`content${num}`);
+      const error = document.getElementById(`error${num}`);
+      const card = document.getElementById(`activity${num}`);
+      const lockIcon = card.querySelector('.lock-icon');
+      
+      let userAnswer = input.value.toLowerCase().trim();
+      const correct = correctAnswer.toLowerCase().trim();
+
+      // Remove all spaces, slashes, dashes for comparison
+      const cleanUser = userAnswer.replace(/[\s\-\/]/g, '');
+      const cleanCorrect = correct.replace(/[\s\-\/]/g, '');
+
+      // Flexible date matching for activities 1 and 3
+      let isCorrect = false;
+      
+      if (num === 1) {
+        // Activity 1: 22 June 2024 - accept any variant
+        const dateVariants = [
+          '22june2024', '22jun2024', '222024', '22062024', '22/06/2024', '22-06-2024',
+          'june222024', 'jun222024', '2262024', '06222024'
+        ];
+        isCorrect = dateVariants.some(variant => cleanUser.includes(variant.replace(/[\s\-\/]/g, '')));
+      } 
+      else if (num === 2) {
+        // Activity 2: Goa - accept any variant
+        isCorrect = userAnswer === 'goa' || userAnswer === 'goa, india' || userAnswer === 'goa india';
+      }
+      else if (num === 3) {
+        // Activity 3: cuddle or sleep - accept variants
+        const cuddleVariants = ['cuddle', 'cuddling', 'cuddles', 'cuddlewithyou', 'cuddleyou'];
+        const sleepVariants = ['sleep', 'sleeping', 'sleepwithyou', 'sleepingtogether', 'sleeptogether'];
+        isCorrect = cuddleVariants.some(variant => userAnswer.includes(variant)) || 
+                    sleepVariants.some(variant => userAnswer.includes(variant));
+      }
+      else if (num === 4) {
+        // Activity 4: 1 Dec 2024 - accept any variant
+        const dateVariants = [
+          '1dec2024', '1december2024', '01dec2024', '01december2024',
+          '112024', '1122024', '01122024', '12024', '1/12/2024', '01/12/2024',
+          'dec12024', 'december12024', '12/1/2024', '12/01/2024'
+        ];
+        isCorrect = dateVariants.some(variant => cleanUser.includes(variant.replace(/[\s\-\/]/g, '')));
+      }
+
+      if (isCorrect) {
+        error.style.display = "none";
+        input.style.display = "none";
+        card.querySelector('.unlock-btn').style.display = "none";
+        card.querySelector('.activity-question').style.display = "none";
+        lockIcon.textContent = "✅";
+        content.style.display = "block";
+        card.classList.add('unlocked');
+        
+        confettiInstance({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: ['#ffb6d9', '#ff6bb5', '#a8d8ff', '#5eb3ff']
+        });
+
+        unlockedCount++;
+
+        if (unlockedCount === 4) {
+          setTimeout(() => {
+            finalReveal.style.display = "block";
+            finalReveal.scrollIntoView({ behavior: 'smooth' });
+            
+            setTimeout(() => {
+              confettiInstance({
+                particleCount: 300,
+                spread: 180,
+                startVelocity: 60,
+                origin: { y: 0.5 },
+                colors: ['#ffb6d9', '#ff6bb5', '#a8d8ff', '#5eb3ff']
+              });
+            }, 500);
+          }, 800);
+        }
+      } else {
+        error.style.display = "block";
+        input.style.borderColor = "#ff4444";
+        setTimeout(() => {
+          input.style.borderColor = "";
+        }, 2000);
+      }
+    }
+
+    window.unlockActivity = unlockActivity;
+  </script>
+</body>
+</html>
