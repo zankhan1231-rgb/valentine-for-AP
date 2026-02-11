@@ -5,10 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Will you be my Valentine, PB?</title>
 
-  <!-- Confetti library -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -23,16 +21,10 @@
       --blue-dark: #7dc4ff;
       --purple: #e5d4ff;
       --gradient-romantic: linear-gradient(135deg, #ffe5f3 0%, #ffc0e0 25%, #e5d4ff 50%, #c2e0ff 75%, #e8f4ff 100%);
-
-      /* This will be updated by JS to animate the cursor */
       --heartCursor: auto;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       min-height: 100vh;
@@ -44,12 +36,9 @@
       overflow-x: hidden;
       position: relative;
       padding: 20px;
-
-      /* ✅ Beating heart cursor (set via JS) */
       cursor: var(--heartCursor, auto);
     }
 
-    /* Animated background with floating hearts */
     body::before {
       content: '💕 💝 💖 ✨ 💗 🌸 💕 💝 💖 ✨ 💗 🌸 💕 💝 💖 ✨ 💗 🌸';
       position: fixed;
@@ -75,17 +64,9 @@
       animation: float 25s ease-in-out infinite;
     }
 
-    @keyframes float-hearts {
-      0% { transform: translateY(100vh); }
-      100% { transform: translateY(-100vh); }
-    }
+    @keyframes float-hearts { 0% { transform: translateY(100vh); } 100% { transform: translateY(-100vh); } }
+    @keyframes float { 0%,100% { transform: translateY(0) scale(1); opacity: 0.6; } 50% { transform: translateY(-30px) scale(1.1); opacity: 0.8; } }
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0) scale(1); opacity: 0.6; }
-      50% { transform: translateY(-30px) scale(1.1); opacity: 0.8; }
-    }
-
-    /* Confetti Canvas */
     #confettiCanvas {
       position: fixed;
       inset: 0;
@@ -95,27 +76,34 @@
       z-index: 9999;
     }
 
-    /* Main Container */
-    .container {
-      width: 100%;
-      max-width: 900px;
-      position: relative;
-      z-index: 10;
-    }
+    .container { width: 100%; max-width: 900px; position: relative; z-index: 10; }
 
-    /* Main Card - Transparent */
     .card {
       background: transparent;
-      backdrop-filter: none;
-      border-radius: 0;
       padding: 50px 40px;
       text-align: center;
-      box-shadow: none;
-      border: none;
       position: relative;
     }
 
-    /* Romantic Animal SVG */
+    /* Music control button */
+    .music-btn {
+      position: fixed;
+      top: 14px;
+      right: 14px;
+      z-index: 10000;
+      border: none;
+      border-radius: 999px;
+      padding: 12px 16px;
+      font-weight: 700;
+      font-size: 14px;
+      background: rgba(255,255,255,0.85);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .music-btn:active { transform: scale(0.98); }
+
     .art {
       width: 280px;
       margin: 0 auto 20px;
@@ -123,13 +111,8 @@
       filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
       animation: gentle-bounce 3s ease-in-out infinite;
     }
+    @keyframes gentle-bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-    @keyframes gentle-bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-
-    /* Typography */
     h1 {
       font-family: 'Playfair Display', serif;
       font-size: clamp(32px, 5vw, 52px);
@@ -140,11 +123,11 @@
       text-shadow: 0 2px 8px rgba(255, 255, 255, 0.8), 0 4px 16px rgba(255, 31, 104, 0.3);
     }
 
-    /* Button Zone */
     .button-zone {
       position: relative;
       width: 100%;
-      height: 200px;
+      max-width: 760px;
+      height: 220px;
       margin: 40px auto 20px;
       touch-action: none;
     }
@@ -156,10 +139,7 @@
       font-weight: 600;
       border-radius: 50px;
       border: none;
-
-      /* Keep your button cursor 👆 */
       cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><text y="28" font-size="28">👆</text></svg>') 16 16, pointer;
-
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
       user-select: none;
       -webkit-tap-highlight-color: transparent;
@@ -169,8 +149,8 @@
     }
 
     #yesBtn {
-      left: 20%;
-      top: 50%;
+      left: 18%;
+      top: 52%;
       transform: translateY(-50%);
       background: linear-gradient(135deg, var(--pink-dark), var(--pink), var(--pink-light));
       color: white;
@@ -178,30 +158,10 @@
       text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
       overflow: hidden;
     }
-
-    #yesBtn::before {
-      content: '✨';
-      position: absolute;
-      left: 10px;
-      animation: sparkle 1.5s ease-in-out infinite;
-    }
-
-    #yesBtn::after {
-      content: '✨';
-      position: absolute;
-      right: 10px;
-      animation: sparkle 1.5s ease-in-out infinite 0.75s;
-    }
-
-    @keyframes sparkle {
-      0%, 100% { opacity: 0.3; transform: scale(0.8); }
-      50% { opacity: 1; transform: scale(1.2); }
-    }
-
-    #yesBtn:hover {
-      box-shadow: 0 20px 50px rgba(255, 133, 193, 0.5);
-      background: linear-gradient(135deg, #ff70b0, var(--pink-dark), var(--pink));
-    }
+    #yesBtn::before { content: '✨'; position: absolute; left: 10px; animation: sparkle 1.5s ease-in-out infinite; }
+    #yesBtn::after  { content: '✨'; position: absolute; right: 10px; animation: sparkle 1.5s ease-in-out infinite 0.75s; }
+    @keyframes sparkle { 0%,100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
+    #yesBtn:hover { box-shadow: 0 20px 50px rgba(255, 133, 193, 0.5); background: linear-gradient(135deg, #ff70b0, var(--pink-dark), var(--pink)); }
 
     #noBtn {
       left: 72%;
@@ -213,16 +173,8 @@
       font-style: italic;
     }
 
-    /* Success Screen */
-    .result {
-      display: none;
-      animation: fadeIn 0.5s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
-    }
+    .result { display: none; animation: fadeIn 0.5s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
     .result h2 {
       font-family: 'Playfair Display', serif;
@@ -240,17 +192,8 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     }
 
-    /* Activities Section */
-    .activities-section {
-      display: none;
-      margin-top: 40px;
-      animation: slideUp 0.6s ease;
-    }
-
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    .activities-section { display: none; margin-top: 40px; animation: slideUp 0.6s ease; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
     .activities-title {
       font-family: 'Playfair Display', serif;
@@ -261,22 +204,7 @@
       font-weight: 700;
     }
 
-    .activity-card {
-      background: transparent;
-      border-radius: 25px;
-      padding: 35px;
-      margin: 25px 0;
-      box-shadow: none;
-      transition: all 0.3s ease;
-      border: none;
-    }
-
-    .activity-card.unlocked {
-      background: transparent;
-      box-shadow: none;
-      border: none;
-    }
-
+    .activity-card { background: transparent; border-radius: 25px; padding: 35px; margin: 25px 0; }
     .lock-icon {
       font-size: 20px;
       font-weight: 700;
@@ -309,7 +237,6 @@
       background: rgba(255, 255, 255, 0.95);
       display: block;
     }
-
     .activity-input:focus {
       outline: none;
       border-color: var(--pink);
@@ -331,16 +258,10 @@
       margin: 15px auto 15px auto;
       transition: all 0.3s ease;
       max-width: 200px;
+      position: relative;
     }
-
-    .unlock-btn::before {
-      content: '🔓 ';
-    }
-
-    .unlock-btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 10px 30px rgba(125, 196, 255, 0.5);
-    }
+    .unlock-btn::before { content: '🔓 '; }
+    .unlock-btn:hover { transform: scale(1.05); box-shadow: 0 10px 30px rgba(125, 196, 255, 0.5); }
 
     .activity-content {
       display: none;
@@ -351,26 +272,14 @@
       text-shadow: 0 2px 6px rgba(255, 255, 255, 0.9);
     }
 
-    .activity-content strong {
-      text-shadow: 0 2px 6px rgba(255, 255, 255, 0.9);
-    }
+    .error-msg { color: #ff4444; font-size: 14px; margin-top: 10px; display: none; }
 
-    .error-msg {
-      color: #ff4444;
-      font-size: 14px;
-      margin-top: 10px;
-      display: none;
-    }
-
-    /* Final Reveal */
     .final-reveal {
       display: none;
       margin-top: 40px;
       padding: 50px;
       background: transparent;
       border-radius: 35px;
-      border: none;
-      box-shadow: none;
     }
 
     .final-reveal h3 {
@@ -382,15 +291,13 @@
       text-shadow: 0 2px 8px rgba(255, 255, 255, 0.9);
     }
 
-    .final-reveal p {
-      text-shadow: 0 2px 6px rgba(255, 255, 255, 0.8);
-    }
+    .final-reveal p { text-shadow: 0 2px 6px rgba(255, 255, 255, 0.8); }
 
-    /* Mobile Responsive */
     @media (max-width: 768px) {
       .card { padding: 30px 20px; }
       button { padding: 14px 28px; font-size: 16px; }
-      .button-zone { height: 180px; }
+      .button-zone { height: 200px; }
+      #yesBtn { left: 12%; }
     }
   </style>
 </head>
@@ -398,14 +305,16 @@
 <body>
   <canvas id="confettiCanvas"></canvas>
 
-  <!-- Background Music Player -->
-  <audio id="bgMusic" loop preload="auto" autoplay>
+  <!-- Music -->
+  <audio id="bgMusic" loop preload="auto">
+    <!-- IMPORTANT: keep this MP3 in the SAME folder as this HTML, OR replace with a full URL -->
     <source src="Love Story (Fast Piano Ver.).mp3" type="audio/mpeg">
   </audio>
 
+  <button class="music-btn" id="musicBtn" type="button">🔊 Play music</button>
+
   <div class="container">
     <main class="card" id="mainCard">
-      <!-- Romantic Animal with Heart -->
       <svg class="art" viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="fur" x1="0" x2="1">
@@ -423,13 +332,7 @@
                  C314 78 282 92 282 106
                  C282 92 250 78 250 50Z"
               fill="url(#heart)">
-          <animateTransform
-            attributeName="transform"
-            type="scale"
-            values="1;1.1;1"
-            dur="1.5s"
-            repeatCount="indefinite"
-            additive="sum"/>
+          <animateTransform attributeName="transform" type="scale" values="1;1.1;1" dur="1.5s" repeatCount="indefinite" additive="sum"/>
         </path>
 
         <path d="M90 120 C90 70 140 40 190 60
@@ -458,27 +361,20 @@
         <button id="noBtn">Maybe not...</button>
       </section>
 
-      <!-- Success Message -->
       <section class="result" id="result">
         <h2>You just made me the happiest! I love you, PB 💕</h2>
-        <img
-          class="celebration-gif"
-          src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif"
-          alt="Celebration"
-        />
+        <img class="celebration-gif" src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif" alt="Celebration" />
       </section>
 
-      <!-- Activities Section -->
       <section class="activities-section" id="activitiesSection">
         <h3 class="activities-title">Our Valentine's Day 2026 💝</h3>
         <p style="color: #ff6bb5; margin-bottom: 30px; font-weight: 600; font-size: 17px;">
           Unlock each surprise by answering the questions below! 💕<br>
           <span style="font-size: 15px; color: #ff85c1; font-style: italic;">
-            (P.S. If you can't unlock any one, that activity gets cancelled 😏✨)
+            (P.S. If you cannot unlock any one, that activity gets cancelled 😏✨)
           </span>
         </p>
 
-        <!-- Activity 1 -->
         <div class="activity-card" id="activity1">
           <div class="lock-icon">🌅 Morning Perks</div>
           <div class="activity-question">When did we go on our first date?</div>
@@ -491,7 +387,6 @@
           </div>
         </div>
 
-        <!-- Activity 2 -->
         <div class="activity-card" id="activity2">
           <div class="lock-icon">☀️ Afternoon Perks</div>
           <div class="activity-question">Where did our story spark?</div>
@@ -504,35 +399,30 @@
           </div>
         </div>
 
-       <!-- Activity 3 -->
         <div class="activity-card" id="activity3">
           <div class="lock-icon">🌆 Evening Perks</div>
           <div class="activity-question">What's your favorite thing to do with me?</div>
           <input type="text" class="activity-input" id="input3" placeholder="Your answer">
           <button class="unlock-btn" onclick="unlockActivity(3, 'cuddle')">Unlock</button>
           <div class="error-msg" id="error3">Not quite! Try again 💕</div>
-            <div class="activity-content" id="content3">
+          <div class="activity-content" id="content3">
             <div style="font-size: 36px; margin-bottom: 15px;">🎬🍿</div>
-          <strong>Wuthering Heights movie together</strong>
+            <strong>Wuthering Heights movie together</strong>
+          </div>
         </div>
-      </div>
 
+        <div class="activity-card" id="activity4">
+          <div class="lock-icon">🌙 Night Perks</div>
+          <div class="activity-question">When did you first say "I love you"?</div>
+          <input type="text" class="activity-input" id="input4" placeholder="DD Month YYYY">
+          <button class="unlock-btn" onclick="unlockActivity(4, '1 dec 2024')">Unlock</button>
+          <div class="error-msg" id="error4">Not quite! Try again 💕</div>
+          <div class="activity-content" id="content4">
+            <div style="font-size: 36px; margin-bottom: 15px;">🍽️🌹</div>
+            <strong>Romantic dinner date</strong>
+          </div>
+        </div>
 
-        <!-- Activity 4 -->
-<div class="activity-card" id="activity4">
-  <div class="lock-icon">🌙 Night Perks</div>
-  <div class="activity-question">When did u first say "I love you"?</div>
-  <input type="text" class="activity-input" id="input4" placeholder="DD Month YYYY">
-  <button class="unlock-btn" onclick="unlockActivity(4, '1 dec 2024')">Unlock</button>
-  <div class="error-msg" id="error4">Not quite! Try again 💕</div>
-  <div class="activity-content" id="content4">
-    <div style="font-size: 36px; margin-bottom: 15px;">🍽️🌹</div>
-    <strong>Romantic dinner date</strong>
-  </div>
-</div>
-
-
-        <!-- Final Reveal -->
         <div class="final-reveal" id="finalReveal">
           <h3>🎉 All surprises unlocked! 🎉</h3>
           <p style="font-size: 20px; color: #666;">Get ready for the best Valentine's Day ever! 💕✨</p>
@@ -549,54 +439,40 @@
     const activitiesSection = document.getElementById("activitiesSection");
     const finalReveal = document.getElementById("finalReveal");
     const bgMusic = document.getElementById("bgMusic");
+    const musicBtn = document.getElementById("musicBtn");
 
     let unlockedCount = 0;
 
-    /* ---------- ✅ BEATING HEART CURSOR (minimal + clean) ---------- */
+    /* ---------- BEATING HEART CURSOR ---------- */
     (function beatingHeartCursor() {
-      const stroke = "#ff5c93";     // tweak: #ff85c1 for softer
-      const strokeWidth = 2.2;      // tweak: 1.8 for thinner
+      const stroke = "#ff5c93";
+      const strokeWidth = 2.2;
 
       const svgSmall = `
         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
           <g transform="translate(16 16) scale(0.92) translate(-16 -16)">
-            <path d="M16 26
-                     C16 26 5 18.8 5 11.8
-                     C5 8.4 7.5 6.2 10.2 6.2
-                     C12.3 6.2 14 7.4 15 9
-                     C16 7.4 17.7 6.2 19.8 6.2
-                     C22.5 6.2 25 8.4 25 11.8
-                     C25 18.8 16 26 16 26Z"
-                  fill="none"
-                  stroke="${stroke}"
-                  stroke-width="${strokeWidth}"
-                  stroke-linejoin="round"
-                  stroke-linecap="round"/>
+            <path d="M16 26 C16 26 5 18.8 5 11.8 C5 8.4 7.5 6.2 10.2 6.2
+                     C12.3 6.2 14 7.4 15 9 C16 7.4 17.7 6.2 19.8 6.2
+                     C22.5 6.2 25 8.4 25 11.8 C25 18.8 16 26 16 26Z"
+                  fill="none" stroke="${stroke}" stroke-width="${strokeWidth}"
+                  stroke-linejoin="round" stroke-linecap="round"/>
           </g>
         </svg>`.trim();
 
       const svgBig = `
         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
           <g transform="translate(16 16) scale(1.05) translate(-16 -16)">
-            <path d="M16 26
-                     C16 26 5 18.8 5 11.8
-                     C5 8.4 7.5 6.2 10.2 6.2
-                     C12.3 6.2 14 7.4 15 9
-                     C16 7.4 17.7 6.2 19.8 6.2
-                     C22.5 6.2 25 8.4 25 11.8
-                     C25 18.8 16 26 16 26Z"
-                  fill="none"
-                  stroke="${stroke}"
-                  stroke-width="${strokeWidth}"
-                  stroke-linejoin="round"
-                  stroke-linecap="round"/>
+            <path d="M16 26 C16 26 5 18.8 5 11.8 C5 8.4 7.5 6.2 10.2 6.2
+                     C12.3 6.2 14 7.4 15 9 C16 7.4 17.7 6.2 19.8 6.2
+                     C22.5 6.2 25 8.4 25 11.8 C25 18.8 16 26 16 26Z"
+                  fill="none" stroke="${stroke}" stroke-width="${strokeWidth}"
+                  stroke-linejoin="round" stroke-linecap="round"/>
           </g>
         </svg>`.trim();
 
       const toCursorUrl = (svg) => `url("data:image/svg+xml,${encodeURIComponent(svg)}") 16 16, auto`;
       const frames = { small: toCursorUrl(svgSmall), big: toCursorUrl(svgBig) };
 
-      // gentle “lub-dub”
       const beatPattern = [
         { frame: "small", ms: 260 },
         { frame: "big",   ms: 120 },
@@ -619,45 +495,44 @@
       }
     })();
 
-    /* ---------- MUSIC CONTROL ---------- */
+    /* ---------- MUSIC (reliable) ---------- */
     bgMusic.volume = 0.5;
 
-    function tryPlayMusic() {
-      const playPromise = bgMusic.play();
-      if (playPromise !== undefined) {
-        playPromise.then(() => {
-          console.log("Music playing!");
-        }).catch(() => {
-          console.log("Auto-play blocked, will play on interaction");
-        });
+    function setMusicBtn() {
+      musicBtn.textContent = bgMusic.paused ? "🔊 Play music" : "🔇 Pause music";
+    }
+    setMusicBtn();
+
+    async function tryStartMusic() {
+      try {
+        await bgMusic.play();
+      } catch (e) {
+        // autoplay blocked until user interacts
       }
+      setMusicBtn();
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      setTimeout(tryPlayMusic, 100);
+    // Start on first interaction (best cross-browser behavior)
+    const startOnInteraction = () => { tryStartMusic(); };
+    window.addEventListener("pointerdown", startOnInteraction, { once: true });
+    window.addEventListener("touchstart", startOnInteraction, { once: true });
+    window.addEventListener("keydown", startOnInteraction, { once: true });
+
+    musicBtn.addEventListener("click", async () => {
+      if (bgMusic.paused) await tryStartMusic();
+      else bgMusic.pause();
+      setMusicBtn();
     });
 
-    window.addEventListener('load', () => {
-      setTimeout(tryPlayMusic, 100);
-    });
-
-    const startOnInteraction = () => {
-      if (bgMusic.paused) {
-        bgMusic.play().catch(() => {});
-      }
-    };
-
-    document.addEventListener('click', startOnInteraction, { once: true });
-    document.addEventListener('touchstart', startOnInteraction, { once: true });
-    document.addEventListener('keydown', startOnInteraction, { once: true });
-
-    /* ---------- CONFETTI ---------- */
+    /* ---------- CONFETTI (crisp on retina) ---------- */
     const confettiCanvas = document.getElementById("confettiCanvas");
 
     function resizeConfettiCanvas() {
       const dpr = Math.max(1, window.devicePixelRatio || 1);
       confettiCanvas.width = Math.floor(window.innerWidth * dpr);
       confettiCanvas.height = Math.floor(window.innerHeight * dpr);
+      confettiCanvas.style.width = window.innerWidth + "px";
+      confettiCanvas.style.height = window.innerHeight + "px";
     }
 
     resizeConfettiCanvas();
@@ -682,7 +557,7 @@
       })();
     }
 
-    /* ---------- NO BUTTON JUMPS TO RANDOM POSITIONS ---------- */
+    /* ---------- NO BUTTON: clamp inside zone ---------- */
     const noTexts = [
       "Maybe not...",
       "No (u crazy)",
@@ -698,58 +573,52 @@
       "Wrong button babe"
     ];
 
-    const noPositions = [
-      { left: '10%', top: '15%' },
-      { left: '50%', top: '8%' },
-      { left: '75%', top: '20%' },
-      { left: '72%', top: '75%' },
-      { left: '45%', top: '85%' },
-      { left: '12%', top: '78%' },
-      { left: '28%', top: '45%' }
-    ];
-
     let noTextIndex = 0;
     let lastMoveTime = 0;
-    let currentPosIndex = 3;
 
-    function moveNo(px, py) {
-      const b = noBtn.getBoundingClientRect();
-      const d = Math.hypot(
-        (b.left + b.width / 2) - px,
-        (b.top + b.height / 2) - py
-      );
+    function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
 
-      if (d < 120) {
-        let newPosIndex;
-        do {
-          newPosIndex = Math.floor(Math.random() * noPositions.length);
-        } while (newPosIndex === currentPosIndex);
+    function moveNoInsideZone(px, py) {
+      const zoneRect = zone.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
 
-        currentPosIndex = newPosIndex;
-        const newPos = noPositions[newPosIndex];
+      const btnW = btnRect.width;
+      const btnH = btnRect.height;
 
-        noBtn.style.left = newPos.left;
-        noBtn.style.top = newPos.top;
+      // random target inside zone
+      const pad = 10;
+      const targetX = zoneRect.left + pad + Math.random() * (zoneRect.width - btnW - pad * 2);
+      const targetY = zoneRect.top  + pad + Math.random() * (zoneRect.height - btnH - pad * 2);
 
-        const now = Date.now();
-        if (now - lastMoveTime > 600) {
-          noTextIndex = (noTextIndex + 1) % noTexts.length;
-          noBtn.textContent = noTexts[noTextIndex];
-          lastMoveTime = now;
-        }
+      // set as % within the zone
+      const leftPx = clamp(targetX - zoneRect.left, 0, zoneRect.width - btnW);
+      const topPx  = clamp(targetY - zoneRect.top,  0, zoneRect.height - btnH);
+
+      noBtn.style.left = (leftPx + btnW / 2) + "px";
+      noBtn.style.top  = (topPx  + btnH / 2) + "px";
+      noBtn.style.transform = "translate(-50%, -50%)";
+
+      const now = Date.now();
+      if (now - lastMoveTime > 600) {
+        noTextIndex = (noTextIndex + 1) % noTexts.length;
+        noBtn.textContent = noTexts[noTextIndex];
+        lastMoveTime = now;
       }
     }
 
-    zone.addEventListener("pointermove", e => {
+    function maybeDodge(clientX, clientY) {
       const b = noBtn.getBoundingClientRect();
-      const d = Math.hypot(
-        (b.left + b.width / 2) - e.clientX,
-        (b.top + b.height / 2) - e.clientY
-      );
-      if (d < 150) moveNo(e.clientX, e.clientY);
-    });
+      const d = Math.hypot((b.left + b.width / 2) - clientX, (b.top + b.height / 2) - clientY);
+      if (d < 140) moveNoInsideZone(clientX, clientY);
+    }
 
-    noBtn.addEventListener("click", e => e.preventDefault());
+    zone.addEventListener("pointermove", (e) => maybeDodge(e.clientX, e.clientY), { passive: true });
+    zone.addEventListener("touchmove", (e) => {
+      const t = e.touches && e.touches[0];
+      if (t) maybeDodge(t.clientX, t.clientY);
+    }, { passive: true });
+
+    noBtn.addEventListener("click", (e) => e.preventDefault());
 
     /* ---------- YES CLICK ---------- */
     yesBtn.addEventListener("click", () => {
@@ -758,18 +627,30 @@
       resizeConfettiCanvas();
       fullScreenConfetti();
 
-      // Make sure music plays if it was blocked
-      if (bgMusic.paused) {
-        bgMusic.play().catch(() => {});
-      }
+      // if music is blocked, this click counts as interaction
+      tryStartMusic();
 
       setTimeout(() => {
         activitiesSection.style.display = "block";
         activitiesSection.scrollIntoView({ behavior: 'smooth' });
-      }, 2000);
+      }, 1500);
     });
 
-    /* ---------- UNLOCK ACTIVITIES ---------- */
+    /* ---------- UNLOCK (more forgiving parsing) ---------- */
+    function normalize(s) {
+      return (s || "")
+        .toLowerCase()
+        .trim()
+        .replace(/[.,]/g, "")
+        .replace(/\s+/g, " ");
+    }
+
+    function normalizeDateLoose(s) {
+      // supports "22 june 2024", "22/06/2024", "June 22 2024", "22062024"
+      const raw = normalize(s).replace(/[\s\-\/]/g, "");
+      return raw;
+    }
+
     function unlockActivity(num, correctAnswer) {
       const input = document.getElementById(`input${num}`);
       const content = document.getElementById(`content${num}`);
@@ -777,37 +658,26 @@
       const card = document.getElementById(`activity${num}`);
       const lockIcon = card.querySelector('.lock-icon');
 
-      let userAnswer = input.value.toLowerCase().trim();
-      const correct = correctAnswer.toLowerCase().trim();
-
-      const cleanUser = userAnswer.replace(/[\s\-\/]/g, '');
-      const cleanCorrect = correct.replace(/[\s\-\/]/g, '');
+      const userAnswer = normalize(input.value);
+      const correct = normalize(correctAnswer);
 
       let isCorrect = false;
 
       if (num === 1) {
-        const dateVariants = [
-          '22june2024', '22jun2024', '222024', '22062024', '22/06/2024', '22-06-2024',
-          'june222024', 'jun222024', '2262024', '06222024'
-        ];
-        isCorrect = dateVariants.some(variant => cleanUser.includes(variant.replace(/[\s\-\/]/g, '')));
-      }
-      else if (num === 2) {
-        isCorrect = userAnswer === 'goa' || userAnswer === 'goa, india' || userAnswer === 'goa india';
-      }
-      else if (num === 3) {
-        const cuddleVariants = ['cuddle', 'cuddling', 'cuddles', 'cuddlewithyou', 'cuddleyou'];
-        const sleepVariants = ['sleep', 'sleeping', 'sleepwithyou', 'sleepingtogether', 'sleeptogether'];
-        isCorrect = cuddleVariants.some(v => userAnswer.includes(v)) ||
-                    sleepVariants.some(v => userAnswer.includes(v));
-      }
-      else if (num === 4) {
-        const dateVariants = [
-          '1dec2024', '1december2024', '01dec2024', '01december2024',
-          '112024', '1122024', '01122024', '12024', '1/12/2024', '01/12/2024',
-          'dec12024', 'december12024', '12/1/2024', '12/01/2024'
-        ];
-        isCorrect = dateVariants.some(variant => cleanUser.includes(variant.replace(/[\s\-\/]/g, '')));
+        const u = normalizeDateLoose(userAnswer);
+        isCorrect = [
+          "22june2024","22jun2024","22062024","06222024","june222024","jun222024"
+        ].some(v => u.includes(v));
+      } else if (num === 2) {
+        isCorrect = ["goa", "goa india", "goa, india"].includes(userAnswer);
+      } else if (num === 3) {
+        isCorrect = ["cuddle","cuddling","cuddles","sleep","sleeping","sleep together","cuddle with you","sleep with you"]
+          .some(v => userAnswer.includes(v));
+      } else if (num === 4) {
+        const u = normalizeDateLoose(userAnswer);
+        isCorrect = [
+          "1dec2024","1december2024","01122024","1/12/2024","01/12/2024","dec12024","december12024","12012024","12012024"
+        ].some(v => u.includes(v.replace(/[\s\-\/]/g, "")));
       }
 
       if (isCorrect) {
@@ -817,17 +687,15 @@
         card.querySelector('.activity-question').style.display = "none";
         lockIcon.textContent = "✅";
         content.style.display = "block";
-        card.classList.add('unlocked');
 
         confettiInstance({
-          particleCount: 100,
-          spread: 70,
+          particleCount: 120,
+          spread: 80,
           origin: { y: 0.6 },
           colors: ['#ffb6d9', '#ff6bb5', '#a8d8ff', '#5eb3ff']
         });
 
         unlockedCount++;
-
         if (unlockedCount === 4) {
           setTimeout(() => {
             finalReveal.style.display = "block";
@@ -835,7 +703,7 @@
 
             setTimeout(() => {
               confettiInstance({
-                particleCount: 300,
+                particleCount: 320,
                 spread: 180,
                 startVelocity: 60,
                 origin: { y: 0.5 },
@@ -847,9 +715,7 @@
       } else {
         error.style.display = "block";
         input.style.borderColor = "#ff4444";
-        setTimeout(() => {
-          input.style.borderColor = "";
-        }, 2000);
+        setTimeout(() => { input.style.borderColor = ""; }, 1200);
       }
     }
 
