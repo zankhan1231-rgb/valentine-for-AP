@@ -23,12 +23,9 @@
       --blue-dark: #7dc4ff;
       --purple: #e5d4ff;
       --gradient-romantic: linear-gradient(135deg, #ffe5f3 0%, #ffc0e0 25%, #e5d4ff 50%, #c2e0ff 75%, #e8f4ff 100%);
-
-      /* This will be updated by JS to animate the cursor */
-      --heartCursor: auto;
     }
 
-    * {
+    * { 
       box-sizing: border-box;
       margin: 0;
       padding: 0;
@@ -44,9 +41,7 @@
       overflow-x: hidden;
       position: relative;
       padding: 20px;
-
-      /* ✅ Beating heart cursor (set via JS) */
-      cursor: var(--heartCursor, auto);
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><text y="28" font-size="28">💕</text></svg>') 16 16, auto;
     }
 
     /* Animated background with floating hearts */
@@ -67,7 +62,7 @@
       content: '';
       position: fixed;
       inset: 0;
-      background-image:
+      background-image: 
         radial-gradient(circle at 15% 25%, rgba(255, 192, 224, 0.4) 0%, transparent 40%),
         radial-gradient(circle at 85% 75%, rgba(194, 224, 255, 0.4) 0%, transparent 40%),
         radial-gradient(circle at 50% 50%, rgba(229, 212, 255, 0.3) 0%, transparent 50%);
@@ -156,10 +151,7 @@
       font-weight: 600;
       border-radius: 50px;
       border: none;
-
-      /* Keep your button cursor 👆 */
       cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><text y="28" font-size="28">👆</text></svg>') 16 16, pointer;
-
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
       user-select: none;
       -webkit-tap-highlight-color: transparent;
@@ -388,9 +380,18 @@
 
     /* Mobile Responsive */
     @media (max-width: 768px) {
-      .card { padding: 30px 20px; }
-      button { padding: 14px 28px; font-size: 16px; }
-      .button-zone { height: 180px; }
+      .card {
+        padding: 30px 20px;
+      }
+
+      button {
+        padding: 14px 28px;
+        font-size: 16px;
+      }
+
+      .button-zone {
+        height: 180px;
+      }
     }
   </style>
 </head>
@@ -550,101 +551,41 @@
 
     let unlockedCount = 0;
 
-    /* ---------- ✅ BEATING HEART CURSOR (minimal + clean) ---------- */
-    (function beatingHeartCursor() {
-      const stroke = "#ff5c93";     // tweak: #ff85c1 for softer
-      const strokeWidth = 2.2;      // tweak: 1.8 for thinner
-
-      const svgSmall = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-          <g transform="translate(16 16) scale(0.92) translate(-16 -16)">
-            <path d="M16 26
-                     C16 26 5 18.8 5 11.8
-                     C5 8.4 7.5 6.2 10.2 6.2
-                     C12.3 6.2 14 7.4 15 9
-                     C16 7.4 17.7 6.2 19.8 6.2
-                     C22.5 6.2 25 8.4 25 11.8
-                     C25 18.8 16 26 16 26Z"
-                  fill="none"
-                  stroke="${stroke}"
-                  stroke-width="${strokeWidth}"
-                  stroke-linejoin="round"
-                  stroke-linecap="round"/>
-          </g>
-        </svg>`.trim();
-
-      const svgBig = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-          <g transform="translate(16 16) scale(1.05) translate(-16 -16)">
-            <path d="M16 26
-                     C16 26 5 18.8 5 11.8
-                     C5 8.4 7.5 6.2 10.2 6.2
-                     C12.3 6.2 14 7.4 15 9
-                     C16 7.4 17.7 6.2 19.8 6.2
-                     C22.5 6.2 25 8.4 25 11.8
-                     C25 18.8 16 26 16 26Z"
-                  fill="none"
-                  stroke="${stroke}"
-                  stroke-width="${strokeWidth}"
-                  stroke-linejoin="round"
-                  stroke-linecap="round"/>
-          </g>
-        </svg>`.trim();
-
-      const toCursorUrl = (svg) => `url("data:image/svg+xml,${encodeURIComponent(svg)}") 16 16, auto`;
-      const frames = { small: toCursorUrl(svgSmall), big: toCursorUrl(svgBig) };
-
-      // gentle “lub-dub”
-      const beatPattern = [
-        { frame: "small", ms: 260 },
-        { frame: "big",   ms: 120 },
-        { frame: "small", ms: 260 },
-        { frame: "big",   ms: 120 }
-      ];
-
-      let i = 0;
-      function tick() {
-        document.body.style.setProperty("--heartCursor", frames[beatPattern[i].frame]);
-        const delay = beatPattern[i].ms;
-        i = (i + 1) % beatPattern.length;
-        setTimeout(tick, delay);
-      }
-
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", tick, { once: true });
-      } else {
-        tick();
-      }
-    })();
-
     /* ---------- MUSIC CONTROL ---------- */
+    // Set volume
     bgMusic.volume = 0.5;
 
+    // Try to play music on page load
     function tryPlayMusic() {
       const playPromise = bgMusic.play();
+      
       if (playPromise !== undefined) {
         playPromise.then(() => {
           console.log("Music playing!");
-        }).catch(() => {
+        }).catch(error => {
           console.log("Auto-play blocked, will play on interaction");
         });
       }
     }
 
+    // Try immediately on DOMContentLoaded
     document.addEventListener('DOMContentLoaded', () => {
       setTimeout(tryPlayMusic, 100);
     });
 
+    // Try on window load
     window.addEventListener('load', () => {
       setTimeout(tryPlayMusic, 100);
     });
 
+    // Play on ANY user interaction if autoplay was blocked
     const startOnInteraction = () => {
       if (bgMusic.paused) {
         bgMusic.play().catch(() => {});
       }
     };
 
+    // Listen for multiple interaction types
     document.addEventListener('click', startOnInteraction, { once: true });
     document.addEventListener('touchstart', startOnInteraction, { once: true });
     document.addEventListener('keydown', startOnInteraction, { once: true });
@@ -695,7 +636,7 @@
       "Try the other button 👉",
       "Wrong button babe"
     ];
-
+    
     const noPositions = [
       { left: '10%', top: '15%' },
       { left: '50%', top: '8%' },
@@ -705,7 +646,7 @@
       { left: '12%', top: '78%' },
       { left: '28%', top: '45%' }
     ];
-
+    
     let noTextIndex = 0;
     let lastMoveTime = 0;
     let currentPosIndex = 3;
@@ -716,16 +657,16 @@
         (b.left + b.width / 2) - px,
         (b.top + b.height / 2) - py
       );
-
+      
       if (d < 120) {
         let newPosIndex;
         do {
           newPosIndex = Math.floor(Math.random() * noPositions.length);
         } while (newPosIndex === currentPosIndex);
-
+        
         currentPosIndex = newPosIndex;
         const newPos = noPositions[newPosIndex];
-
+        
         noBtn.style.left = newPos.left;
         noBtn.style.top = newPos.top;
 
@@ -755,10 +696,13 @@
       result.style.display = "block";
       resizeConfettiCanvas();
       fullScreenConfetti();
-
-      // Make sure music plays if it was blocked
-      if (bgMusic.paused) {
-        bgMusic.play().catch(() => {});
+      
+      // Ensure music is playing
+      if (!isMusicPlaying) {
+        bgMusic.play().then(() => {
+          isMusicPlaying = true;
+          musicToggle.textContent = "🔊";
+        }).catch(() => {});
       }
 
       setTimeout(() => {
@@ -774,7 +718,7 @@
       const error = document.getElementById(`error${num}`);
       const card = document.getElementById(`activity${num}`);
       const lockIcon = card.querySelector('.lock-icon');
-
+      
       let userAnswer = input.value.toLowerCase().trim();
       const correct = correctAnswer.toLowerCase().trim();
 
@@ -782,22 +726,22 @@
       const cleanCorrect = correct.replace(/[\s\-\/]/g, '');
 
       let isCorrect = false;
-
+      
       if (num === 1) {
         const dateVariants = [
           '22june2024', '22jun2024', '222024', '22062024', '22/06/2024', '22-06-2024',
           'june222024', 'jun222024', '2262024', '06222024'
         ];
         isCorrect = dateVariants.some(variant => cleanUser.includes(variant.replace(/[\s\-\/]/g, '')));
-      }
+      } 
       else if (num === 2) {
         isCorrect = userAnswer === 'goa' || userAnswer === 'goa, india' || userAnswer === 'goa india';
       }
       else if (num === 3) {
         const cuddleVariants = ['cuddle', 'cuddling', 'cuddles', 'cuddlewithyou', 'cuddleyou'];
         const sleepVariants = ['sleep', 'sleeping', 'sleepwithyou', 'sleepingtogether', 'sleeptogether'];
-        isCorrect = cuddleVariants.some(v => userAnswer.includes(v)) ||
-                    sleepVariants.some(v => userAnswer.includes(v));
+        isCorrect = cuddleVariants.some(variant => userAnswer.includes(variant)) || 
+                    sleepVariants.some(variant => userAnswer.includes(variant));
       }
       else if (num === 4) {
         const dateVariants = [
@@ -816,7 +760,7 @@
         lockIcon.textContent = "✅";
         content.style.display = "block";
         card.classList.add('unlocked');
-
+        
         confettiInstance({
           particleCount: 100,
           spread: 70,
@@ -830,7 +774,7 @@
           setTimeout(() => {
             finalReveal.style.display = "block";
             finalReveal.scrollIntoView({ behavior: 'smooth' });
-
+            
             setTimeout(() => {
               confettiInstance({
                 particleCount: 300,
