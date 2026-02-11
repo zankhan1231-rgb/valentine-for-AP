@@ -5,8 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Will you be my Valentine, PB?</title>
 
+  <!-- Confetti library -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -64,9 +66,16 @@
       animation: float 25s ease-in-out infinite;
     }
 
-    @keyframes float-hearts { 0% { transform: translateY(100vh); } 100% { transform: translateY(-100vh); } }
-    @keyframes float { 0%,100% { transform: translateY(0) scale(1); opacity: 0.6; } 50% { transform: translateY(-30px) scale(1.1); opacity: 0.8; } }
+    @keyframes float-hearts {
+      0% { transform: translateY(100vh); }
+      100% { transform: translateY(-100vh); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0) scale(1); opacity: 0.6; }
+      50% { transform: translateY(-30px) scale(1.1); opacity: 0.8; }
+    }
 
+    /* Confetti Canvas */
     #confettiCanvas {
       position: fixed;
       inset: 0;
@@ -82,27 +91,9 @@
       background: transparent;
       padding: 50px 40px;
       text-align: center;
-      position: relative;
-    }
-
-    /* Music control button */
-    .music-btn {
-      position: fixed;
-      top: 14px;
-      right: 14px;
-      z-index: 10000;
+      box-shadow: none;
       border: none;
-      border-radius: 999px;
-      padding: 12px 16px;
-      font-weight: 700;
-      font-size: 14px;
-      background: rgba(255,255,255,0.85);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-      cursor: pointer;
-      backdrop-filter: blur(8px);
-      -webkit-tap-highlight-color: transparent;
     }
-    .music-btn:active { transform: scale(0.98); }
 
     .art {
       width: 280px;
@@ -111,7 +102,10 @@
       filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
       animation: gentle-bounce 3s ease-in-out infinite;
     }
-    @keyframes gentle-bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    @keyframes gentle-bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
 
     h1 {
       font-family: 'Playfair Display', serif;
@@ -160,8 +154,14 @@
     }
     #yesBtn::before { content: '✨'; position: absolute; left: 10px; animation: sparkle 1.5s ease-in-out infinite; }
     #yesBtn::after  { content: '✨'; position: absolute; right: 10px; animation: sparkle 1.5s ease-in-out infinite 0.75s; }
-    @keyframes sparkle { 0%,100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
-    #yesBtn:hover { box-shadow: 0 20px 50px rgba(255, 133, 193, 0.5); background: linear-gradient(135deg, #ff70b0, var(--pink-dark), var(--pink)); }
+    @keyframes sparkle {
+      0%, 100% { opacity: 0.3; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+    #yesBtn:hover {
+      box-shadow: 0 20px 50px rgba(255, 133, 193, 0.5);
+      background: linear-gradient(135deg, #ff70b0, var(--pink-dark), var(--pink));
+    }
 
     #noBtn {
       left: 72%;
@@ -174,7 +174,10 @@
     }
 
     .result { display: none; animation: fadeIn 0.5s ease; }
-    @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
 
     .result h2 {
       font-family: 'Playfair Display', serif;
@@ -193,7 +196,10 @@
     }
 
     .activities-section { display: none; margin-top: 40px; animation: slideUp 0.6s ease; }
-    @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
     .activities-title {
       font-family: 'Playfair Display', serif;
@@ -244,6 +250,7 @@
     }
 
     .unlock-btn {
+      position: static;
       background: linear-gradient(135deg, var(--blue-dark), var(--blue), var(--blue-light));
       color: white;
       border: 3px solid rgba(255, 255, 255, 0.9);
@@ -254,11 +261,10 @@
       cursor: pointer;
       font-family: 'Poppins', sans-serif;
       text-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-      display: block;
+      display: inline-block;
       margin: 15px auto 15px auto;
       transition: all 0.3s ease;
-      max-width: 200px;
-      position: relative;
+      max-width: 220px;
     }
     .unlock-btn::before { content: '🔓 '; }
     .unlock-btn:hover { transform: scale(1.05); box-shadow: 0 10px 30px rgba(125, 196, 255, 0.5); }
@@ -305,16 +311,16 @@
 <body>
   <canvas id="confettiCanvas"></canvas>
 
-  <!-- Music -->
-  <audio id="bgMusic" loop preload="auto">
-    <!-- IMPORTANT: keep this MP3 in the SAME folder as this HTML, OR replace with a full URL -->
+  <!-- Background Music
+       NOTE: True "autoplay with sound" is blocked on many browsers.
+       This will autoplay muted on load, then unmute on first tap/click anywhere. -->
+  <audio id="bgMusic" loop preload="auto" autoplay muted playsinline>
     <source src="Love Story (Fast Piano Ver.).mp3" type="audio/mpeg">
   </audio>
 
-  <button class="music-btn" id="musicBtn" type="button">🔊 Play music</button>
-
   <div class="container">
     <main class="card" id="mainCard">
+      <!-- Romantic Animal with Heart -->
       <svg class="art" viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="fur" x1="0" x2="1">
@@ -357,15 +363,17 @@
       <h1>Hey PB, your Pollywag has a question... will you be my Valentine forever? 💕</h1>
 
       <section class="button-zone" id="zone">
-        <button id="yesBtn">Yes! 💕</button>
-        <button id="noBtn">Maybe not...</button>
+        <button id="yesBtn" type="button">Yes! 💕</button>
+        <button id="noBtn" type="button">Maybe not...</button>
       </section>
 
+      <!-- Success Message -->
       <section class="result" id="result">
         <h2>You just made me the happiest! I love you, PB 💕</h2>
         <img class="celebration-gif" src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif" alt="Celebration" />
       </section>
 
+      <!-- Activities Section -->
       <section class="activities-section" id="activitiesSection">
         <h3 class="activities-title">Our Valentine's Day 2026 💝</h3>
         <p style="color: #ff6bb5; margin-bottom: 30px; font-weight: 600; font-size: 17px;">
@@ -375,11 +383,12 @@
           </span>
         </p>
 
+        <!-- Activity 1 -->
         <div class="activity-card" id="activity1">
           <div class="lock-icon">🌅 Morning Perks</div>
           <div class="activity-question">When did we go on our first date?</div>
-          <input type="text" class="activity-input" id="input1" placeholder="DD Month YYYY">
-          <button class="unlock-btn" onclick="unlockActivity(1, '22 june 2024')">Unlock</button>
+          <input type="text" class="activity-input" id="input1" placeholder="DD Month YYYY" autocomplete="off">
+          <button class="unlock-btn" id="unlock1" type="button">Unlock</button>
           <div class="error-msg" id="error1">Not quite! Try again 💕</div>
           <div class="activity-content" id="content1">
             <div style="font-size: 36px; margin-bottom: 15px;">☀️🥞💋</div>
@@ -387,11 +396,12 @@
           </div>
         </div>
 
+        <!-- Activity 2 -->
         <div class="activity-card" id="activity2">
           <div class="lock-icon">☀️ Afternoon Perks</div>
           <div class="activity-question">Where did our story spark?</div>
-          <input type="text" class="activity-input" id="input2" placeholder="City name">
-          <button class="unlock-btn" onclick="unlockActivity(2, 'goa')">Unlock</button>
+          <input type="text" class="activity-input" id="input2" placeholder="City name" autocomplete="off">
+          <button class="unlock-btn" id="unlock2" type="button">Unlock</button>
           <div class="error-msg" id="error2">Not quite! Try again 💕</div>
           <div class="activity-content" id="content2">
             <div style="font-size: 36px; margin-bottom: 15px;">🛍️💕</div>
@@ -399,11 +409,12 @@
           </div>
         </div>
 
+        <!-- Activity 3 -->
         <div class="activity-card" id="activity3">
           <div class="lock-icon">🌆 Evening Perks</div>
           <div class="activity-question">What's your favorite thing to do with me?</div>
-          <input type="text" class="activity-input" id="input3" placeholder="Your answer">
-          <button class="unlock-btn" onclick="unlockActivity(3, 'cuddle')">Unlock</button>
+          <input type="text" class="activity-input" id="input3" placeholder="Your answer" autocomplete="off">
+          <button class="unlock-btn" id="unlock3" type="button">Unlock</button>
           <div class="error-msg" id="error3">Not quite! Try again 💕</div>
           <div class="activity-content" id="content3">
             <div style="font-size: 36px; margin-bottom: 15px;">🎬🍿</div>
@@ -411,11 +422,12 @@
           </div>
         </div>
 
+        <!-- Activity 4 -->
         <div class="activity-card" id="activity4">
           <div class="lock-icon">🌙 Night Perks</div>
-          <div class="activity-question">When did you first say "I love you"?</div>
-          <input type="text" class="activity-input" id="input4" placeholder="DD Month YYYY">
-          <button class="unlock-btn" onclick="unlockActivity(4, '1 dec 2024')">Unlock</button>
+          <div class="activity-question">When did u first say "I love you"?</div>
+          <input type="text" class="activity-input" id="input4" placeholder="DD Month YYYY" autocomplete="off">
+          <button class="unlock-btn" id="unlock4" type="button">Unlock</button>
           <div class="error-msg" id="error4">Not quite! Try again 💕</div>
           <div class="activity-content" id="content4">
             <div style="font-size: 36px; margin-bottom: 15px;">🍽️🌹</div>
@@ -423,6 +435,7 @@
           </div>
         </div>
 
+        <!-- Final Reveal -->
         <div class="final-reveal" id="finalReveal">
           <h3>🎉 All surprises unlocked! 🎉</h3>
           <p style="font-size: 20px; color: #666;">Get ready for the best Valentine's Day ever! 💕✨</p>
@@ -439,7 +452,14 @@
     const activitiesSection = document.getElementById("activitiesSection");
     const finalReveal = document.getElementById("finalReveal");
     const bgMusic = document.getElementById("bgMusic");
-    const musicBtn = document.getElementById("musicBtn");
+
+    // Correct answers
+    const ANSWERS = {
+      1: "22 june 2024",
+      2: "goa",
+      3: "cuddle",
+      4: "1 dec 2024"
+    };
 
     let unlockedCount = 0;
 
@@ -451,22 +471,36 @@
       const svgSmall = `
         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
           <g transform="translate(16 16) scale(0.92) translate(-16 -16)">
-            <path d="M16 26 C16 26 5 18.8 5 11.8 C5 8.4 7.5 6.2 10.2 6.2
-                     C12.3 6.2 14 7.4 15 9 C16 7.4 17.7 6.2 19.8 6.2
-                     C22.5 6.2 25 8.4 25 11.8 C25 18.8 16 26 16 26Z"
-                  fill="none" stroke="${stroke}" stroke-width="${strokeWidth}"
-                  stroke-linejoin="round" stroke-linecap="round"/>
+            <path d="M16 26
+                     C16 26 5 18.8 5 11.8
+                     C5 8.4 7.5 6.2 10.2 6.2
+                     C12.3 6.2 14 7.4 15 9
+                     C16 7.4 17.7 6.2 19.8 6.2
+                     C22.5 6.2 25 8.4 25 11.8
+                     C25 18.8 16 26 16 26Z"
+                  fill="none"
+                  stroke="${stroke}"
+                  stroke-width="${strokeWidth}"
+                  stroke-linejoin="round"
+                  stroke-linecap="round"/>
           </g>
         </svg>`.trim();
 
       const svgBig = `
         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
           <g transform="translate(16 16) scale(1.05) translate(-16 -16)">
-            <path d="M16 26 C16 26 5 18.8 5 11.8 C5 8.4 7.5 6.2 10.2 6.2
-                     C12.3 6.2 14 7.4 15 9 C16 7.4 17.7 6.2 19.8 6.2
-                     C22.5 6.2 25 8.4 25 11.8 C25 18.8 16 26 16 26Z"
-                  fill="none" stroke="${stroke}" stroke-width="${strokeWidth}"
-                  stroke-linejoin="round" stroke-linecap="round"/>
+            <path d="M16 26
+                     C16 26 5 18.8 5 11.8
+                     C5 8.4 7.5 6.2 10.2 6.2
+                     C12.3 6.2 14 7.4 15 9
+                     C16 7.4 17.7 6.2 19.8 6.2
+                     C22.5 6.2 25 8.4 25 11.8
+                     C25 18.8 16 26 16 26Z"
+                  fill="none"
+                  stroke="${stroke}"
+                  stroke-width="${strokeWidth}"
+                  stroke-linejoin="round"
+                  stroke-linecap="round"/>
           </g>
         </svg>`.trim();
 
@@ -495,34 +529,39 @@
       }
     })();
 
-    /* ---------- MUSIC (reliable) ---------- */
-    bgMusic.volume = 0.5;
+    /* ---------- MUSIC: autoplay muted, unmute on first interaction ---------- */
+    bgMusic.volume = 0.0;
+    bgMusic.muted = true;
 
-    function setMusicBtn() {
-      musicBtn.textContent = bgMusic.paused ? "🔊 Play music" : "🔇 Pause music";
+    function startMutedAutoplay() {
+      const p = bgMusic.play();
+      if (p && typeof p.then === "function") p.catch(() => {});
     }
-    setMusicBtn();
+    document.addEventListener("DOMContentLoaded", startMutedAutoplay);
+    window.addEventListener("load", startMutedAutoplay);
 
-    async function tryStartMusic() {
-      try {
-        await bgMusic.play();
-      } catch (e) {
-        // autoplay blocked until user interacts
-      }
-      setMusicBtn();
+    function unmuteAndFadeIn() {
+      bgMusic.muted = false;
+      bgMusic.play().catch(() => {});
+
+      const target = 0.5;
+      const step = 0.05;
+      const interval = 60;
+
+      let v = 0.0;
+      bgMusic.volume = v;
+
+      const t = setInterval(() => {
+        v = Math.min(target, v + step);
+        bgMusic.volume = v;
+        if (v >= target) clearInterval(t);
+      }, interval);
     }
 
-    // Start on first interaction (best cross-browser behavior)
-    const startOnInteraction = () => { tryStartMusic(); };
-    window.addEventListener("pointerdown", startOnInteraction, { once: true });
-    window.addEventListener("touchstart", startOnInteraction, { once: true });
-    window.addEventListener("keydown", startOnInteraction, { once: true });
-
-    musicBtn.addEventListener("click", async () => {
-      if (bgMusic.paused) await tryStartMusic();
-      else bgMusic.pause();
-      setMusicBtn();
-    });
+    // Any first interaction un-mutes and fades in
+    window.addEventListener("pointerdown", unmuteAndFadeIn, { once: true });
+    window.addEventListener("touchstart", unmuteAndFadeIn, { once: true });
+    window.addEventListener("keydown", unmuteAndFadeIn, { once: true });
 
     /* ---------- CONFETTI (crisp on retina) ---------- */
     const confettiCanvas = document.getElementById("confettiCanvas");
@@ -557,7 +596,7 @@
       })();
     }
 
-    /* ---------- NO BUTTON: clamp inside zone ---------- */
+    /* ---------- NO BUTTON DODGE (stays inside zone) ---------- */
     const noTexts = [
       "Maybe not...",
       "No (u crazy)",
@@ -578,19 +617,17 @@
 
     function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
 
-    function moveNoInsideZone(px, py) {
+    function moveNoInsideZone(clientX, clientY) {
       const zoneRect = zone.getBoundingClientRect();
       const btnRect = noBtn.getBoundingClientRect();
-
       const btnW = btnRect.width;
       const btnH = btnRect.height;
 
-      // random target inside zone
       const pad = 10;
+
       const targetX = zoneRect.left + pad + Math.random() * (zoneRect.width - btnW - pad * 2);
       const targetY = zoneRect.top  + pad + Math.random() * (zoneRect.height - btnH - pad * 2);
 
-      // set as % within the zone
       const leftPx = clamp(targetX - zoneRect.left, 0, zoneRect.width - btnW);
       const topPx  = clamp(targetY - zoneRect.top,  0, zoneRect.height - btnH);
 
@@ -627,16 +664,13 @@
       resizeConfettiCanvas();
       fullScreenConfetti();
 
-      // if music is blocked, this click counts as interaction
-      tryStartMusic();
-
       setTimeout(() => {
         activitiesSection.style.display = "block";
         activitiesSection.scrollIntoView({ behavior: 'smooth' });
       }, 1500);
     });
 
-    /* ---------- UNLOCK (more forgiving parsing) ---------- */
+    /* ---------- UNLOCK LOGIC ---------- */
     function normalize(s) {
       return (s || "")
         .toLowerCase()
@@ -645,10 +679,8 @@
         .replace(/\s+/g, " ");
     }
 
-    function normalizeDateLoose(s) {
-      // supports "22 june 2024", "22/06/2024", "June 22 2024", "22062024"
-      const raw = normalize(s).replace(/[\s\-\/]/g, "");
-      return raw;
+    function normalizeCompact(s) {
+      return normalize(s).replace(/[\s\-\/]/g, "");
     }
 
     function unlockActivity(num, correctAnswer) {
@@ -657,6 +689,7 @@
       const error = document.getElementById(`error${num}`);
       const card = document.getElementById(`activity${num}`);
       const lockIcon = card.querySelector('.lock-icon');
+      const unlockBtn = document.getElementById(`unlock${num}`);
 
       const userAnswer = normalize(input.value);
       const correct = normalize(correctAnswer);
@@ -664,7 +697,7 @@
       let isCorrect = false;
 
       if (num === 1) {
-        const u = normalizeDateLoose(userAnswer);
+        const u = normalizeCompact(userAnswer);
         isCorrect = [
           "22june2024","22jun2024","22062024","06222024","june222024","jun222024"
         ].some(v => u.includes(v));
@@ -674,16 +707,17 @@
         isCorrect = ["cuddle","cuddling","cuddles","sleep","sleeping","sleep together","cuddle with you","sleep with you"]
           .some(v => userAnswer.includes(v));
       } else if (num === 4) {
-        const u = normalizeDateLoose(userAnswer);
+        const u = normalizeCompact(userAnswer);
         isCorrect = [
-          "1dec2024","1december2024","01122024","1/12/2024","01/12/2024","dec12024","december12024","12012024","12012024"
-        ].some(v => u.includes(v.replace(/[\s\-\/]/g, "")));
+          "1dec2024","1december2024","01122024","1/12/2024","01/12/2024",
+          "dec12024","december12024","12/1/2024","12/01/2024"
+        ].some(v => u.includes(normalizeCompact(v)));
       }
 
       if (isCorrect) {
         error.style.display = "none";
         input.style.display = "none";
-        card.querySelector('.unlock-btn').style.display = "none";
+        unlockBtn.style.display = "none";
         card.querySelector('.activity-question').style.display = "none";
         lockIcon.textContent = "✅";
         content.style.display = "block";
@@ -719,7 +753,23 @@
       }
     }
 
-    window.unlockActivity = unlockActivity;
+    // Wire unlock buttons
+    document.getElementById("unlock1").addEventListener("click", () => unlockActivity(1, ANSWERS[1]));
+    document.getElementById("unlock2").addEventListener("click", () => unlockActivity(2, ANSWERS[2]));
+    document.getElementById("unlock3").addEventListener("click", () => unlockActivity(3, ANSWERS[3]));
+    document.getElementById("unlock4").addEventListener("click", () => unlockActivity(4, ANSWERS[4]));
+
+    // ✅ ENTER = click the respective unlock button (per input)
+    [1,2,3,4].forEach((n) => {
+      const input = document.getElementById(`input${n}`);
+      const btn = document.getElementById(`unlock${n}`);
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          btn.click();
+        }
+      });
+    });
   </script>
 </body>
 </html>
