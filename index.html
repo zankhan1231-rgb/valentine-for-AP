@@ -41,6 +41,7 @@
       overflow-x: hidden;
       position: relative;
       padding: 20px;
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><text y="28" font-size="28">💕</text></svg>') 16 16, auto;
     }
 
     /* Animated background with floating hearts */
@@ -150,7 +151,7 @@
       font-weight: 600;
       border-radius: 50px;
       border: none;
-      cursor: pointer;
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><text y="28" font-size="28">👆</text></svg>') 16 16, pointer;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
       user-select: none;
       -webkit-tap-highlight-color: transparent;
@@ -432,7 +433,7 @@
   <canvas id="confettiCanvas"></canvas>
 
   <!-- Background Music Player -->
-  <audio id="bgMusic" loop preload="auto">
+  <audio id="bgMusic" loop preload="auto" autoplay>
     <source src="Love Story (Fast Piano Ver.).mp3" type="audio/mpeg">
   </audio>
 
@@ -589,38 +590,70 @@
     let isMusicPlaying = false;
 
     /* ---------- MUSIC CONTROL ---------- */
-    // Set initial volume
+    let isMusicPlaying = false;
+    let musicAttempts = 0;
+
+    // Set volume
     bgMusic.volume = 0.5;
 
-    // Attempt auto-play on page load
-    function tryAutoPlay() {
+    // Check if music is playing after autoplay attempt
+    setTimeout(() => {
+      if (!bgMusic.paused) {
+        isMusicPlaying = true;
+        musicToggle.textContent = "🔊";
+      } else {
+        isMusicPlaying = false;
+        musicToggle.textContent = "🔇";
+      }
+    }, 1000);
+
+    // Multiple auto-play strategies
+    function tryPlayMusic() {
+      if (isMusicPlaying || musicAttempts > 5) return;
+      
+      musicAttempts++;
+      bgMusic.volume = 0.5;
       const playPromise = bgMusic.play();
       
       if (playPromise !== undefined) {
         playPromise.then(() => {
           isMusicPlaying = true;
           musicToggle.textContent = "🔊";
-        }).catch(() => {
+          console.log("Music playing!");
+        }).catch(error => {
+          console.log("Auto-play blocked, attempt:", musicAttempts);
           isMusicPlaying = false;
           musicToggle.textContent = "🔇";
         });
       }
     }
 
-    // Try to play when page loads
-    window.addEventListener('load', tryAutoPlay);
+    // Try immediately on DOMContentLoaded
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(tryPlayMusic, 100);
+    });
 
-    // Try to play on first user interaction
-    let hasInteracted = false;
-    document.addEventListener('click', function() {
-      if (!hasInteracted && !isMusicPlaying) {
-        hasInteracted = true;
+    // Try on window load
+    window.addEventListener('load', () => {
+      setTimeout(tryPlayMusic, 100);
+    });
+
+    // Try on ANY user interaction - click, touch, keypress
+    const startOnInteraction = () => {
+      if (!isMusicPlaying) {
         bgMusic.play().then(() => {
           isMusicPlaying = true;
           musicToggle.textContent = "🔊";
+          console.log("Music started on user interaction");
         }).catch(() => {});
       }
-    }, { once: false });
+    };
+
+    // Listen for multiple interaction types
+    document.addEventListener('click', startOnInteraction);
+    document.addEventListener('touchstart', startOnInteraction);
+    document.addEventListener('keydown', startOnInteraction);
+    document.addEventListener('mousemove', startOnInteraction, { once: true });
 
     // Toggle music button
     musicToggle.addEventListener('click', (e) => {
